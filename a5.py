@@ -112,10 +112,10 @@ class Board:
         coordinate_y = 0
         for row in self.rows:
             for column_val in row:
-                if len(column_val) < num_values:
+                if isinstance(column_val, list) and len(column_val) < num_values:
                     num_values = len(column_val)
-                    coordinate_x = self.rows.index(row) + 1
-                    coordinate_y = row.index(column_val) + 1
+                    coordinate_x = self.rows.index(row)
+                    coordinate_y = row.index(column_val)
         
         return (coordinate_x, coordinate_y)
 
