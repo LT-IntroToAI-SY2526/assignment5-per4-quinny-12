@@ -106,7 +106,19 @@ class Board:
         Returns:
             a tuple of row, column index identifying the most constrained cell
         """
-        pass
+
+        num_values = 10
+        coordinate_x = 0
+        coordinate_y = 0
+        for row in self.rows:
+            for column_val in row:
+                if len(column_val) < num_values:
+                    num_values = len(column_val)
+                    coordinate_x = self.rows.index(row) + 1
+                    coordinate_y = row.index(column_val) + 1
+        
+        return (coordinate_x, coordinate_y)
+
 
     def failure_test(self) -> bool:
         """Check if we've failed to correctly fill out the puzzle. If we find a cell
