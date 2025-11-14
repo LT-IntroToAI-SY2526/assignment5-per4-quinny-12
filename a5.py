@@ -1,3 +1,4 @@
+import time
 import copy  # to make a deepcopy of the board
 from typing import List, Any, Tuple
 
@@ -183,22 +184,31 @@ def DFS(state: Board) -> Board:
     Returns:
         either None in the case of invalid input or a solved board
     """
-    the_stack = Stack()
-    the_stack.push(state)
+    stack = Stack()
+    stack.push(state)
+    iterations = 0
+    start_time = time.time()
 
-    while not the_stack.is_empty():
-        current_board: Board = the_stack.pop()
-        # print(current_board)
+    while not stack.is_empty():
+        iterations += 1
+        current_board: Board = stack.pop()
+        
         if current_board.goal_test():
+            end_time = time.time()
+            elapsed_time = end_time - start_time
+            print(f"DFS took {iterations} iterations in {elapsed_time:.4f} seconds")
             return current_board
+        
         row, col = current_board.find_most_constrained_cell()
         possible_values = current_board.rows[row][col]
-        print(row, col, possible_values)
+        # print(row, col, possible_values)
+
         if not current_board.failure_test():
             for val in possible_values:
                 new_board = copy.deepcopy(current_board)
                 new_board.update(row, col, val)
-                the_stack.push(new_board)
+                stack.push(new_board)
+
     return None
 
 def BFS(state: Board) -> Board:
@@ -213,7 +223,31 @@ def BFS(state: Board) -> Board:
     Returns:
         either None in the case of invalid input or a solved board
     """
-    pass
+    queue = Queue()
+    queue.push(state)
+    iterations = 0
+    start_time = time.time()
+
+    while not queue.is_empty():
+        iterations += 1
+        current_board: Board = queue.pop()
+
+        if current_board.goal_test():
+            end_time = time.time()
+            elapsed_time = end_time - start_time
+            print(f"BFS took {iterations} iterations in {elapsed_time: .4f} seconds")
+            return current_board
+        
+        row, col = current_board.find_most_constrained_cell()
+        possible_values = current_board.rows[row][col]
+
+        if not current_board.failure_test():
+            for val in possible_values:
+                new_board = copy.deepcopy(current_board)
+                new_board.update(row, col, val)
+                queue.push(new_board)
+
+    return None
 
 
 if __name__ == "__main__":
